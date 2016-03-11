@@ -1,32 +1,27 @@
-<?php namespace Illuminate\Foundation\Bootstrap;
+<?php
 
-use Dotenv;
-use InvalidArgumentException;
+namespace Illuminate\Foundation\Bootstrap;
+
+use Dotenv\Dotenv;
+use Dotenv\Exception\InvalidPathException;
 use Illuminate\Contracts\Foundation\Application;
 
-class DetectEnvironment {
-
-	/**
-	 * Bootstrap the given application.
-	 *
-	 * @param  \Illuminate\Contracts\Foundation\Application  $app
-	 * @return void
-	 */
-	public function bootstrap(Application $app)
-	{
-		try
-		{
-			Dotenv::load($app->basePath(), $app->environmentFile());
-		}
-		catch (InvalidArgumentException $e)
-		{
-			//
-		}
-
-		$app->detectEnvironment(function()
-		{
-			return env('APP_ENV', 'production');
-		});
-	}
-
+class DetectEnvironment
+{
+    /**
+     * Bootstrap the given application.
+     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @return void
+     */
+    public function bootstrap(Application $app)
+    {
+        if (! $app->configurationIsCached()) {
+            try {
+                (new Dotenv($app->environmentPath(), $app->environmentFile()))->load();
+            } catch (InvalidPathException $e) {
+                //
+            }
+        }
+    }
 }
