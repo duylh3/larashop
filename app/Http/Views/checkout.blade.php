@@ -1,6 +1,6 @@
 @extends('layouts.layout')
 
-@section('content')       
+@section('content')  
 <section id="cart_items">
     <div class="container">
         <div class="breadcrumbs">
